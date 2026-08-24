@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VibeCheck — Launch Readiness for apps built with AI</title>
+  <meta name="description" content="Built an app with AI? Run a vibe check before you ship. Free, no signup, runs in your browser. One plain-English readiness score and a prioritized fix list.">
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap site-header__inner">
+      <a class="brand" href="./">
+        <span class="brand__mark" aria-hidden="true">✓</span>
+        <span class="brand__name">VibeCheck</span>
+      </a>
+      <p class="brand__note">Free · No signup · Runs in your browser</p>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="wrap">
+        <h1 class="hero__title">Built an app with AI? Run a vibe check before you ship.</h1>
+        <p class="hero__sub">
+          You used Cursor, Bolt, Lovable, Replit, v0, or Claude to build something real.
+          Before you put it in front of the world, get a plain-English
+          <strong>Launch Readiness</strong> report card — no accounts, no tech jargon,
+          nothing leaves your browser.
+        </p>
+        <div class="hero__cta">
+          <a class="btn btn--primary btn--lg" href="#dashboard-section">Start my vibe check</a>
+          <button class="btn btn--ghost btn--lg" id="export-md" type="button">Copy report as Markdown</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Overall score -->
+    <section class="score-section" aria-labelledby="score-heading">
+      <div class="wrap">
+        <h2 id="score-heading" class="section-title">Your Launch Readiness</h2>
+        <div class="score-card">
+          <div id="score-panel" class="score" aria-live="polite">
+            <!-- score gauge injected by src/ui/results.js -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- The 5 checks -->
+    <section id="dashboard-section" class="dashboard-section" aria-labelledby="dash-heading">
+      <div class="wrap">
+        <h2 id="dash-heading" class="section-title">The 5 checks</h2>
+        <p class="section-lead">
+          Run them in any order. Each one asks for something simple you can paste in
+          (your HTML, your README, your robots.txt) and gives you a clear result.
+        </p>
+        <div id="dashboard" class="dashboard">
+          <!-- check cards injected by src/ui/cards.js -->
+          <p class="empty-state">Loading your checks…</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Work panel: a single check's form -->
+    <section class="wrap">
+      <div id="work-panel" class="work-panel" hidden aria-live="polite">
+        <!-- a module's form injected by src/ui/form.js -->
+      </div>
+    </section>
+
+    <!-- Results + prioritized fixes -->
+    <section class="report-section" aria-labelledby="report-heading">
+      <div class="wrap report-grid">
+        <div class="report-grid__main">
+          <h2 id="report-heading" class="section-title">Latest result</h2>
+          <div id="results" class="results" aria-live="polite">
+            <p class="empty-state">Run a check above and your result shows up here.</p>
+          </div>
+        </div>
+        <aside class="report-grid__side" aria-labelledby="fixlist-heading">
+          <h2 id="fixlist-heading" class="section-title">To-do before launch</h2>
+          <div id="fix-list" class="fixlist-wrap">
+            <!-- prioritized fixes injected by src/ui/results.js -->
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        VibeCheck is free and open source (MIT). It runs entirely in your browser —
+        your code and text never leave this page.
+      </p>
+    </div>
+  </footer>
+
+  <script type="module" src="src/shell.js"></script>
+</body>
+</html>
