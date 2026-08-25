@@ -14,10 +14,18 @@
   <header class="site-header">
     <div class="wrap site-header__inner">
       <a class="brand" href="./">
-        <span class="brand__mark" aria-hidden="true">✓</span>
+        <span class="brand__mark" aria-hidden="true">
+          <svg viewBox="0 0 28 28" fill="none" focusable="false">
+            <path d="M8 14.5l4 4 8-9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
         <span class="brand__name">VibeCheck</span>
       </a>
-      <p class="brand__note">Free · No signup · Runs in your browser</p>
+      <p class="brand__note">
+        <span class="brand__note-item">Free</span>
+        <span class="brand__note-item">No signup</span>
+        <span class="brand__note-item">Runs in your browser</span>
+      </p>
     </div>
   </header>
 
@@ -37,9 +45,29 @@
           <a class="btn btn--primary btn--lg" href="#dashboard-section">Start my vibe check</a>
           <a class="btn btn--ghost btn--lg" href="#how">How it works</a>
         </div>
-        <p class="hero__trust">
-          <span aria-hidden="true">🔒</span> 100% in-browser · open source (MIT) · works offline once loaded
-        </p>
+        <ul class="hero__trust" role="list">
+          <li class="trust-pill">
+            <svg class="trust-pill__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
+              <rect x="4.5" y="9" width="11" height="7.5" rx="1.6" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M7 9V6.75a3 3 0 0 1 6 0V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            100% in your browser
+          </li>
+          <li class="trust-pill">
+            <svg class="trust-pill__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
+              <path d="M10 2.5 4 5v4.2c0 3.6 2.5 6.3 6 8.3 3.5-2 6-4.7 6-8.3V5l-6-2.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="m7.6 10 1.7 1.7L13 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Open source (MIT)
+          </li>
+          <li class="trust-pill">
+            <svg class="trust-pill__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
+              <path d="M3.5 12.5A6.5 6.5 0 0 1 15 8.4M16.5 7.5V4M16.5 7.5H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M16.5 7.5A6.5 6.5 0 0 1 5 11.6M3.5 12.5V16M3.5 12.5H7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Works offline
+          </li>
+        </ul>
       </div>
     </section>
 

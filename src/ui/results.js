@@ -1,9 +1,17 @@
 // ui/results.js — render a module's ModuleResult and the overall score/report.
 // UI layer (touches DOM). All dynamic text goes through textContent.
 
-import { el, clear } from './dom.js';
+import { el, clear, icon } from './dom.js';
 
-const FINDING_MARK = { good: '✓', warn: '•', bad: '✗' };
+const IK = { fill: 'none', stroke: 'currentColor', 'stroke-width': '2', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' };
+const FINDING_GLYPH = {
+  good: [{ d: 'm4.5 8.5 2.4 2.4L11.5 5', attrs: IK }],
+  warn: [{ d: 'M8 3.5v5.2', attrs: IK }, { d: 'M8 11.6h.01', attrs: IK }],
+  bad: [{ d: 'M4.5 4.5 11.5 11.5M11.5 4.5 4.5 11.5', attrs: IK }],
+};
+function findingGlyph(level) {
+  return icon({ viewBox: '0 0 16 16', className: 'finding__mark', paths: FINDING_GLYPH[level] || FINDING_GLYPH.warn });
+}
 
 // Plain-English status words shown on the result badge.
 const STATUS_WORD = {
@@ -43,7 +51,7 @@ export function renderResult(meta, result, copy = defaultCopy) {
     for (const f of result.findings) {
       ul.append(
         el('li', { class: `finding finding--${f.level}` }, [
-          el('span', { class: 'finding__mark', attrs: { 'aria-hidden': 'true' }, text: FINDING_MARK[f.level] || '•' }),
+          el('span', { class: 'finding__mark-wrap', attrs: { 'aria-hidden': 'true' } }, [findingGlyph(f.level)]),
           el('span', { class: 'finding__text', text: f.text }),
         ]),
       );
@@ -86,6 +94,17 @@ export function renderResult(meta, result, copy = defaultCopy) {
 export function renderScore(scoreEl, overall) {
   clear(scoreEl);
   const pct = Math.max(0, Math.min(100, Number(overall.score) || 0));
+  // Crisp SVG progress ring. r=52 → circumference ≈ 326.7; the visible arc is
+  // driven purely by the --pct custom property in CSS (no per-node style needed
+  // on the SVG), so the only inline style is the numeric-only --pct below.
+  const ring = icon({
+    viewBox: '0 0 120 120',
+    className: 'score__ring',
+    paths: [
+      { tag: 'circle', attrs: { cx: '60', cy: '60', r: '52', class: 'score__ring-track', fill: 'none' } },
+      { tag: 'circle', attrs: { cx: '60', cy: '60', r: '52', class: 'score__ring-arc', fill: 'none' } },
+    ],
+  });
   const gauge = el(
     'div',
     {
@@ -97,6 +116,7 @@ export function renderScore(scoreEl, overall) {
       },
     },
     [
+      ring,
       el('div', { class: 'score__dial' }, [
         el('span', { class: 'score__number', text: String(overall.score) }),
         el('span', { class: 'score__outof', text: '/ 100' }),
