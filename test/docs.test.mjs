@@ -230,6 +230,29 @@ test('hasCodeBlock detects fenced and indented code', () => {
   assert.equal(hasCodeBlock('```\n\n```'), false, 'empty fence is not a code block');
 });
 
+test('hasCodeBlock is ReDoS-safe on a long run of backticks (no catastrophic backtracking)', () => {
+  // Regression: the old regex /(```+|~~~+)[^\n]*\n([\s\S]*?)\n\1/ took ~3.5s at
+  // 3000 backticks and hung the tab at 6000+. A long unbroken backtick run is
+  // easy to hit accidentally (a mangled paste) and trivial to weaponize. The
+  // linear scan must finish this near-instantly. 50k backticks, hard bound.
+  const payload = '`'.repeat(50000);
+  const start = Date.now();
+  const result = hasCodeBlock(payload);
+  const elapsed = Date.now() - start;
+  assert.equal(result, false, 'a run of backticks with no newline is not a code block');
+  assert.ok(elapsed < 500, `hasCodeBlock should be O(n); took ${elapsed}ms (ReDoS regression)`);
+});
+
+test('checkReadme is ReDoS-safe on hostile backtick-heavy input', () => {
+  // End-to-end: the full README analyzer (which calls hasCodeBlock) must not hang
+  // on pasted input that is a giant backtick run.
+  const start = Date.now();
+  const rep = checkReadme('`'.repeat(50000));
+  const elapsed = Date.now() - start;
+  assert.ok(rep.score >= 0 && rep.score <= 100);
+  assert.ok(elapsed < 1000, `checkReadme should not backtrack catastrophically; took ${elapsed}ms`);
+});
+
 test('hasBadge and hasImage detect shields and images', () => {
   assert.equal(hasBadge('![build](https://img.shields.io/badge/x.svg)'), true);
   assert.equal(hasImage('![shot](./screenshot.png)'), true);

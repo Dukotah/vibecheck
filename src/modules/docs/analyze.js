@@ -74,13 +74,39 @@ export function firstTitle(readme) {
   return h ? h.text : '';
 }
 
-/** Does the README contain at least one fenced code block with content? */
+/**
+ * Does the README contain at least one fenced code block with content?
+ *
+ * Implemented as a linear line-by-line scan rather than a single regex with a
+ * `\1` backreference. The old regex `/(```+|~~~+)[^\n]*\n([\s\S]*?)\n\1/` was
+ * vulnerable to catastrophic backtracking (ReDoS): a long unbroken run of
+ * backticks with no newline made the engine try every split of the run as the
+ * opening fence, hanging the browser tab on hostile/accidental input. This scan
+ * is O(n) and never backtracks.
+ */
 export function hasCodeBlock(readme) {
   const text = toText(readme);
-  const m = text.match(/(```+|~~~+)[^\n]*\n([\s\S]*?)\n\1/);
-  if (m && m[2] && m[2].trim()) return true;
+  const lines = text.split(/\r?\n/);
+  let openFence = null; // the ``` or ~~~ run that opened the current block
+  let sawContent = false;
+  for (const line of lines) {
+    const fenceMatch = /^\s*(```+|~~~+)/.exec(line);
+    if (fenceMatch) {
+      const mark = fenceMatch[1][0];
+      if (openFence === null) {
+        openFence = mark; // opening fence
+        sawContent = false;
+      } else if (mark === openFence) {
+        // Closing fence: a block with any non-blank content counts.
+        if (sawContent) return true;
+        openFence = null;
+      }
+      continue;
+    }
+    if (openFence !== null && line.trim()) sawContent = true;
+  }
   // Indented code block: 4+ leading spaces on a non-empty line following a blank.
-  return /(^|\n)\s*\n {4,}\S/.test(text);
+  return /(^|\n)[ \t]*\n {4,}\S/.test(text);
 }
 
 /** Does the README contain a shields.io / badge image? */
