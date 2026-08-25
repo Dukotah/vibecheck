@@ -1,6 +1,6 @@
 {
   "name": "vibecheck",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "VibeCheck — a free, no-signup, browser-only Launch Readiness report card for apps built with AI coding tools. Runs 5 pre-launch checks (legal, accessibility, AI crawlers, social share preview, docs) client-side and gives one plain-English readiness score plus a prioritized fix list.",
   "type": "module",
   "license": "MIT",

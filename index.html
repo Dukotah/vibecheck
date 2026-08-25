@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>VibeCheck — Launch Readiness for apps built with AI</title>
   <meta name="description" content="Built an app with AI? Run a vibe check before you ship. Free, no signup, runs in your browser. One plain-English readiness score and a prioritized fix list.">
+  <meta name="color-scheme" content="light">
   <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
@@ -24,17 +25,45 @@
     <!-- Hero -->
     <section class="hero">
       <div class="wrap">
+        <p class="hero__eyebrow">Launch readiness for vibecoded apps</p>
         <h1 class="hero__title">Built an app with AI? Run a vibe check before you ship.</h1>
         <p class="hero__sub">
           You used Cursor, Bolt, Lovable, Replit, v0, or Claude to build something real.
           Before you put it in front of the world, get a plain-English
-          <strong>Launch Readiness</strong> report card — no accounts, no tech jargon,
-          nothing leaves your browser.
+          <strong>Launch Readiness</strong> score — no accounts, no tech jargon, and
+          nothing you paste ever leaves your browser.
         </p>
         <div class="hero__cta">
           <a class="btn btn--primary btn--lg" href="#dashboard-section">Start my vibe check</a>
-          <button class="btn btn--ghost btn--lg" id="export-md" type="button">Copy report as Markdown</button>
+          <a class="btn btn--ghost btn--lg" href="#how">How it works</a>
         </div>
+        <p class="hero__trust">
+          <span aria-hidden="true">🔒</span> 100% in-browser · open source (MIT) · works offline once loaded
+        </p>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section id="how" class="how-section" aria-labelledby="how-heading">
+      <div class="wrap">
+        <h2 id="how-heading" class="section-title">How it works</h2>
+        <ol class="steps" role="list">
+          <li class="step">
+            <span class="step__num" aria-hidden="true">1</span>
+            <h3 class="step__title">Pick a check</h3>
+            <p class="step__text">Five quick checks, run in any order. Not sure? Start at the top.</p>
+          </li>
+          <li class="step">
+            <span class="step__num" aria-hidden="true">2</span>
+            <h3 class="step__title">Paste something simple</h3>
+            <p class="step__text">Your page HTML, your README, your robots.txt — or click a built-in example to see it work.</p>
+          </li>
+          <li class="step">
+            <span class="step__num" aria-hidden="true">3</span>
+            <h3 class="step__title">Get plain-English results</h3>
+            <p class="step__text">A clear score, what is wrong, and copy-paste fixes. Your readiness score updates live.</p>
+          </li>
+        </ol>
       </div>
     </section>
 
@@ -45,6 +74,14 @@
         <div class="score-card">
           <div id="score-panel" class="score" aria-live="polite">
             <!-- score gauge injected by src/ui/results.js -->
+          </div>
+          <p id="run-progress" class="score-card__progress">
+            Nothing checked yet — pick a check below to begin. Your score updates as you go.
+          </p>
+          <div class="score-card__actions">
+            <button class="btn btn--ghost btn--sm" id="export-md" type="button" disabled>Copy report (Markdown)</button>
+            <button class="btn btn--ghost btn--sm" id="download-md" type="button" disabled>Download report</button>
+            <button class="btn btn--ghost btn--sm" id="print-report" type="button" disabled>Print / save as PDF</button>
           </div>
         </div>
       </div>
@@ -94,8 +131,12 @@
   <footer class="site-footer">
     <div class="wrap">
       <p>
-        VibeCheck is free and open source (MIT). It runs entirely in your browser —
-        your code and text never leave this page.
+        VibeCheck is free and open source (<a href="https://github.com/Dukotah/vibecheck">MIT</a>).
+        It runs entirely in your browser — your code and text never leave this page.
+      </p>
+      <p class="site-footer__fine">
+        Not legal or compliance advice. VibeCheck catches the common, high-impact
+        misses; a clean score is a great start, not a guarantee.
       </p>
     </div>
   </footer>
