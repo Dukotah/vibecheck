@@ -1,244 +1,182 @@
-# Article Brief — VibeCheck launch article (for vibecoders)
+# Article brief — VibeCheck
 
-This is a brief for a writer. It is not the article. Use it to draft a
-publish-ready piece for **vibecoders** — non-technical people who built a real
-app with an AI coding tool and want to know it is safe to ship. Assume many
-readers land on this from a jobs/career context (e.g. an Indeed post or a
-career-adjacent page), so they may be career-switchers, side-project builders,
-or someone shipping their first thing. Meet them there.
+Everything you need to write the LinkedIn post and the longer piece. Written to
+be raided, not published as-is.
 
-> **Publishing note for the owner:** there is no automated posting to Indeed or
-> anywhere else. Publishing is a manual owner step. This brief and the drafted
-> article are handoff artifacts only.
+**Live:** https://vibecheck.copperbaytech.com
+**Source:** https://github.com/Dukotah/vibecheck
+**Social card:** `og.png` — dark, shows a score ring at 87/100
 
 ---
 
-## 1. The reader and their pain
+## The one-sentence version
 
-**Who they are.** Someone who described what they wanted to Cursor, Bolt,
-Lovable, Replit, v0, or Claude and got back a working app. They can run it. It
-looks real. They are proud of it — and quietly terrified to put it in front of
-the world, because they do not actually know what is under the hood.
+VibeCheck is a free tool that takes the link to something you built with AI and
+tells you, in plain English, whether it is safe to ship — with the fixes already
+written out.
 
-**What keeps them up at night (say these back to them):**
+## The angle that makes it a story
 
-- "Am I allowed to even publish this? The AI pulled in a bunch of libraries I
-  never chose. What if one of them means I have to give my code away for free?"
-- "I have no license file. Is that bad? Does it matter?"
-- "Can a blind person or someone using a keyboard actually use my app, or am I
-  about to get called out — or sued — the day I launch?"
-- "Every AI company is scraping the web. Is mine being copied to train models
-  right now? Can I stop it? Did I accidentally block Google instead?"
-- "I posted my link and it showed up as an ugly bare URL with no picture. It
-  looked amateur. Why?"
-- "My README is one line. If someone smart looks at my repo, will they think I
-  have no idea what I am doing?"
+Not "I built a tool." Everybody built a tool.
 
-The through-line: **they built something real, but nobody handed them the
-pre-flight checklist that technical people take for granted.** They do not want
-a lecture on WCAG or SPDX license identifiers. They want a friend to look at it
-and say "yep, ship it" or "fix these three things first."
+The story is **the gap between working and shippable**, and that AI coding tools
+sit squarely in it. They are excellent at producing something that runs. They
+are structurally bad at telling you what you forgot, because what you forgot is
+not in the prompt. Nobody asks Cursor "and also, is my dependency licensing
+going to bite me?"
 
----
+So a generation of people are shipping real, live, public software with:
 
-## 2. The core promise of VibeCheck
+- no LICENSE file at all — which legally means all rights reserved, including
+  against future-you and any collaborator
+- dependencies nobody looked at, some of them copyleft
+- images with no alt text and inputs with no labels
+- no `robots.txt`, so every AI crawler is helping itself; or a `robots.txt`
+  that accidentally tells Google to go away
+- links that unfurl in Slack as a naked URL
+- a README nobody but the author could follow
 
-**Built an app with AI? Run a vibe check before you ship.**
+None of that shows up when the app "works". All of it shows up later, usually in
+front of someone whose opinion matters.
 
-VibeCheck is a free, no-signup web app that gives your project a single,
-plain-English **Launch Readiness** score (0–100) and a prioritized "fix these
-first" list — blockers at the top. You paste simple things you already have
-(your page's HTML, your README, your dependency list), and it hands back what is
-wrong in normal words plus copy-paste fixes you drop straight into your project.
+**The line to use:** *AI made it trivial to build software and no easier at all
+to launch it.*
 
-Three honest hooks the writer can lean on:
+## What the tool actually does
 
-1. **No terminal, no accounts, no jargon.** If you can copy and paste, you can
-   use it.
-2. **Your code never leaves your browser.** Everything runs client-side on your
-   own machine. Nothing you paste is uploaded anywhere. (This is true and
-   verifiable — lead with it, it defuses the "am I leaking my secret project"
-   fear.)
-3. **It is five separate pre-launch checks merged into one guided screen** with
-   one score, so you are not juggling five tools and five verdicts.
+Paste a URL. Ten seconds later: a Launch Readiness score out of 100, a band you
+can say out loud (*not ready / almost there / launch-ready*), a to-do list with
+blockers on top, and paste-ready text for every fix.
 
----
+Five checks:
 
-## 3. The five checks, in plain English (and why each matters BEFORE you ship)
+| Check | The question |
+| --- | --- |
+| Legal & Licenses | Can you legally ship this? |
+| Accessibility | Can everyone actually use it? |
+| AI Crawlers | Who gets to read and train on your site? |
+| Social Share Preview | Card, or naked URL? |
+| README & Docs | Could a stranger run this? |
 
-Explain each as: *what it answers → what you paste → why it matters before
-launch.* Keep the tone reassuring, not scary.
+One URL answers three of them against the live page. Drag your project folder in
+and it works out what each file is — `README.md`, `package.json`, `LICENSE`,
+`robots.txt` — and fills in the other two. Those files never leave the browser.
 
-### Check 1 — Legal & Licenses
-- **Answers:** "Can I legally ship this?"
-- **You paste:** your `LICENSE` file (if you have one) and your dependency list
-  (`package.json` or `requirements.txt`).
-- **Why before shipping:** The AI probably added open-source libraries you never
-  picked. Most are harmless (MIT, Apache), but a few carry "copyleft" terms that
-  can force *your* code to become open-source too, and some carry no license at
-  all (a real risk). Separately, if *your* project has no license file, then
-  legally nobody — not even future you — can reuse it; it defaults to "all
-  rights reserved." VibeCheck flags the risky ones by name and, if you have no
-  license, hands you a ready-to-use one. Fixing this after launch is far more
-  painful than before.
+## The details worth putting in the piece
 
-### Check 2 — Accessibility
-- **Answers:** "Can everyone actually use it?"
-- **You paste:** your page's HTML.
-- **Why before shipping:** It scans the high-impact accessibility basics (the
-  page declares its language, has a title, images have alt text, form fields
-  have labels, there is a real main heading, links say where they go, users can
-  pinch-to-zoom, tab order makes sense). These are the things that lock out
-  people using screen readers, keyboards, or low vision — and they are also the
-  ones that draw complaints and legal attention. They are cheap to fix in code
-  and embarrassing to fix in public.
+Pick two or three. All of them are true and checkable.
 
-### Check 3 — AI Crawlers & robots.txt
-- **Answers:** "Who can crawl and train on my site?"
-- **You paste:** you tick which groups of AI bots to keep out, and optionally
-  paste your current `robots.txt`.
-- **Why before shipping:** The moment you go live, AI crawlers can start copying
-  your pages to train models or answer questions inside chatbots. You may be
-  fine with that, or you may not — but it should be *your* choice, made on
-  purpose. VibeCheck lets you decide (block training bots, block AI assistants,
-  or the middle ground: opt out of Google/Apple AI training but stay in normal
-  search) and checks whether your file actually does what you intend. It also
-  catches the classic disaster: a `robots.txt` that accidentally blocks *every*
-  crawler, including Google, so your site never appears in search.
+1. **The privacy claim is specific, not vibes.** Dropped files are read with the
+   File API and never uploaded. The only thing ever sent anywhere is a URL you
+   type, and it goes to our own fetcher — no third-party CORS proxy, nothing
+   stored. This is the objection people have ("am I uploading my secret
+   project?") so lead with it.
 
-### Check 4 — Social Share Preview
-- **Answers:** "What shows when someone shares my link — a nice card or a naked
-  URL?"
-- **You paste:** the `<head>` HTML of your page.
-- **Why before shipping:** The first time your link gets dropped in iMessage,
-  Slack, X, LinkedIn, Facebook, or Discord, it either renders a clean card with
-  a title, description, and image — or a bare, lifeless URL that reads as
-  "amateur." This is set by a handful of Open Graph and Twitter Card meta tags
-  that AI tools routinely leave out. VibeCheck reads what you have, tells you
-  what each app will show, and hands you the corrected tags to paste in. It is a
-  five-minute fix that changes the entire first impression of your launch.
+2. **A shared link publishes a score, not your problems.** The `?r=` token
+   carries the overall score, the per-check verdicts and the address. It does
+   not carry your HTML, your dependencies, your findings, or even the *names* of
+   what is broken. You can post the number without publishing the mess.
 
-### Check 5 — README & Docs
-- **Answers:** "Can a stranger understand and run my project?"
-- **You paste:** your `README.md` — or, if you do not have one, you answer a few
-  guided questions and it writes a starter README for you.
-- **Why before shipping:** Your README is the front door. If it is one line (or
-  the AI's placeholder), anyone who looks — a potential user, a collaborator, a
-  hiring manager, future-you six months from now — cannot tell what the project
-  is, how to install it, how to run it, or what license it is under. VibeCheck
-  scores what you have against the sections that matter and fills the gaps with
-  paste-ready markdown.
+3. **The tool that checks your headers has real ones.** Strict CSP with inline
+   script forbidden outright — the theme bootstrap lives in its own file
+   specifically so the policy can say `script-src 'self'` and mean it.
 
-**Tie it together:** each check gives its own 0–100 score, and the overall
-Launch Readiness score updates live as you complete them. Checks you have not
-run yet are counted as "not checked yet" — they do not unfairly drag your score
-down. When you are done, you get a prioritized fix list (blockers first) and a
-shareable report you can copy as Markdown, download as a `.md`, or print / save
-as PDF.
+4. **The fetcher is the scary part, so it is the careful part.** http/https
+   only, no credentials in the URL, every redirect hop re-validated, and the
+   hostname resolved and refused if it lands on a private, loopback, link-local
+   or CGNAT address. A URL like `localtest.me` — a real public domain that
+   resolves to 127.0.0.1 — is rejected. Plus a hard timeout, byte cap and
+   redirect limit.
 
----
+5. **Two bugs the build only found by using it.** Running the real pipeline
+   against a live site showed the "Fix these first" list filling up with six
+   near-identical "Fix og:whatever" rows, burying an actual blocker. Correctly
+   sorted; useless to read. Fixed by dealing one fix per check in turn within
+   each severity tier, and by only emitting per-tag snippets for problems that
+   genuinely break the card. **This is the honest beat of the piece: the unit
+   tests were all green both times.**
 
-## 4. Suggested structure / outline
+6. **The score had to move.** v1 scored on pass/warn/fail buckets, so a check
+   passing at 90 reported as 100 and fixing one thing changed nothing. Now the
+   score is the average of the real per-check numbers — with any check that
+   found a blocker capped at 50 until it is gone. A number that does not respond
+   to your work is not a score, it is a decoration.
 
-1. **Hook (2–3 sentences).** "You built an app with AI. It works. You are
-   scared to launch it — and you should double-check a few things first." Name
-   the exact tools (Cursor/Bolt/Lovable/Replit/v0/Claude) so the reader feels
-   seen.
-2. **The gap nobody warned you about.** Vibecoding got you a working app; it did
-   not give you the pre-flight checklist technical founders take for granted.
-   List 3–4 of the pains from section 1 as short, punchy questions.
-3. **Meet VibeCheck.** The core promise (section 2). Lead with "free, no signup,
-   nothing you paste leaves your browser." Include the one-line what-it-does.
-4. **The five checks.** One short subsection each (section 3). For each: the
-   plain-English question it answers, the one thing you paste, and the "here is
-   what could go wrong at launch" stakes. Keep it skimmable — bold the question.
-5. **What you actually get out of it.** One score, a friendly band ("Not ready
-   to ship yet" → "Almost there" → "Looking launch-ready"), a prioritized fix
-   list with one-click copy, and an exportable report.
-6. **How to run it (30 seconds).** Open the app, paste, read your score. No
-   install. Optionally: it is open-source and you can run it locally.
-7. **Honest limits.** A short, plain paragraph (section 7). This builds trust,
-   especially with a jobs-site audience who has seen overhyped tools.
-8. **Call to action** (section 6).
+7. **The architecture rule that made it testable.** No `document`, no `window`,
+   no `fetch` anywhere under `src/modules/`. Every check is a pure function from
+   text to a result object, which is why 275 tests run in under a second with no
+   browser. The UI layer is the only thing allowed near the DOM, and every
+   dynamic string goes through `textContent`, enforced by a suite that feeds all
+   five checks a payload combining `<script>`, `<img onerror>` and `javascript:`
+   and asserts no live markup survives the render.
 
-Keep total length ~900–1400 words. Short paragraphs. No walls of text. Second
-person ("you"). Zero unexplained jargon — if you must use a term like "Open
-Graph," define it in the same sentence.
+## The honest bit (do not skip this)
 
----
+v1 of this existed and was, by the numbers, finished: five working checks, 227
+passing tests, a clean design system. It was also unusable. It made you pick a
+check, then paste the specific artifact that check wanted, five separate times,
+on a page that was a marketing site with a form bolted into the middle. It was
+light-mode only. It had never been deployed, so there was no link.
 
-## 5. Candidate titles (pick/adapt)
+**The engine was done and the product did not exist.** That distinction is the
+most useful thing in this whole story, because it is exactly the trap AI-assisted
+building sets: you get working parts fast and mistake them for a working thing.
 
-1. Built an App with AI? Run This Free Check Before You Hit Publish
-2. The 5-Minute Launch Checklist for Anyone Who Built an App with AI
-3. You Vibecoded an App. Here's How to Know It's Actually Safe to Ship.
-4. From "It Works on My Screen" to "Ready to Launch" — A Free Vibe Check
-5. Before You Share That Link: 5 Things AI Left Out of Your App
-6. No-Signup Launch Readiness Score for Cursor, Bolt, Lovable & Replit Projects
-7. Shipped by AI, Checked by You: A Plain-English Readiness Report Card
-8. Is Your AI-Built App Ready to Launch? Find Out in Your Browser, Free
+What changed in v2 was not capability. Every check does the same thing it did
+before. What changed was the number of decisions asked of the user, which went
+from five to one.
 
----
+## Post shapes
 
-## 6. Call to action
+**Short LinkedIn post — the confession opener**
 
-Primary: **"Run your free vibe check now — no signup, nothing leaves your
-browser."** Link to the live app: `https://dukotah.github.io/vibecheck/`.
+> I built a tool, finished it, tested it, and then couldn't bring myself to send
+> anyone the link.
+>
+> It worked. Five checks, 227 passing tests, a design system. It was also
+> miserable to use: pick a check, find the right file, paste it, repeat five
+> times.
+>
+> The engine was done. The product didn't exist.
+>
+> [what changed — one input]
+>
+> [link]
 
-Reinforce with a low-commitment framing: "Paste one thing, get one score. If it
-says 'launch-ready,' ship with confidence. If not, it tells you exactly what to
-fix and hands you the fix." Optional secondary CTA for the technical-curious:
-"It's open-source (MIT) and runs entirely client-side — inspect it or run it
-locally if you like."
+**Short LinkedIn post — the problem opener**
 
----
+> AI made it trivial to build software. It made it no easier at all to launch
+> one.
+>
+> Things I keep finding on live, public sites built with AI tools this year:
+> [list three]
+>
+> None of it shows up when the app "works." All of it shows up later.
+>
+> [link]
 
-## 7. SEO keywords
+**Longer piece — suggested spine**
 
-**Primary:** launch readiness checklist, is my app ready to launch, AI-built app
-checklist, vibecoding launch checklist.
+1. The gap between working and shippable, and why AI tools widen it
+2. The five things that actually bite people (with the specifics)
+3. v1: how I built something finished and unusable
+4. The one-input rewrite, and what it cost
+5. Two bugs that only surfaced by using the thing — with green tests
+6. What I would tell someone shipping this weekend
 
-**Tool/audience:** Cursor app checklist, Bolt app checklist, Lovable app
-checklist, Replit app checklist, v0 app checklist, apps built with AI.
+## Numbers you can quote
 
-**Per-check long-tail:** free license checker for dependencies, do I need a
-LICENSE file, website accessibility checker (paste HTML), block AI crawlers
-robots.txt, block GPTBot ClaudeBot, why does my link show no preview, Open Graph
-image not showing, how to write a README.
+- 5 checks, 275 tests, 0 dependencies in the front end, no build step
+- One input replaces five separate paste-a-thing forms
+- ~10 seconds from paste to score
+- Share links are ~240 characters
+- Free, no signup, no account, MIT
 
-**Qualifiers that convert:** free, no signup, no install, runs in browser,
-client-side, privacy-safe.
+## Do not claim
 
-Do not keyword-stuff. Work these into natural headings and sentences.
-
----
-
-## 8. Honest known limitations (the writer MUST NOT overstate)
-
-State these plainly. Do not imply certification, legal advice, or a guarantee.
-
-- **It is a readiness *indicator*, not a certification or legal advice.** The
-  Legal & Licenses check flags common risks from a bundled offline database of
-  popular package licenses; it is not a lawyer and does not audit every possible
-  dependency or transitive dependency. A high score is not legal clearance.
-- **The Accessibility check covers the high-impact WCAG 2.2 basics from pasted
-  HTML — it is not a full audit.** It cannot catch everything (color contrast
-  nuance, dynamic/JS-rendered states, real screen-reader behavior). A good score
-  means you cleared the common, high-impact basics, not that you are fully
-  WCAG-compliant.
-- **You paste static content; it does not crawl or log into your live site.**
-  For accessibility and share-preview it reads the HTML you give it, so results
-  are only as current as what you paste. It does not execute your app.
-- **License data is a bundled cache of popular packages, not a live registry
-  lookup.** Very new or obscure packages may resolve as "unknown" rather than
-  wrong — treat unknowns as "go check this one," not "this is fine."
-- **The AI-crawler list reflects known bots at build time.** New crawlers appear
-  constantly; the generated `robots.txt` covers the well-known ones, and
-  `robots.txt` is a request that well-behaved bots honor — it is not an
-  enforcement wall.
-- **No accounts, no history, no saved projects.** It does not remember your
-  runs; the report is generated on the spot and it is on you to export it.
-- **Do not promise it will "make your app pass" anything or "protect" you from
-  scraping/lawsuits.** Frame it as: it surfaces the common pre-launch problems
-  early, in plain English, with fixes — so you ship on purpose instead of by
-  accident.
+- That it catches everything. It catches the common, high-impact misses. The
+  footer says so and the piece should too.
+- That it is legal advice. It is not.
+- That it can see inside a JavaScript-only page. If a site renders entirely
+  client-side, the fetched HTML is a shell — the tool says so and offers the
+  paste path instead.
