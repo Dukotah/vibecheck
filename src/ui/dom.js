@@ -67,8 +67,13 @@ export function icon(spec = {}) {
   setAttr(svg, 'aria-hidden', 'true');
   setAttr(svg, 'focusable', 'false');
   if (spec.className) {
-    if ('className' in svg) svg.className = spec.className; // shim path
-    setAttr(svg, 'class', spec.className); // real SVG needs the attribute
+    setAttr(svg, 'class', spec.className); // real SVG + attribute reflection
+    // In a real browser, SVGElement.className is a read-only SVGAnimatedString;
+    // assigning to it throws in strict-mode ESM. Only the test shim (plain
+    // createElement, no namespace) has a writable className, so gate on !hasNS.
+    if (!hasNS && 'className' in svg) {
+      try { svg.className = spec.className; } catch { /* real SVG: attribute above is enough */ }
+    }
   }
   if (spec.attrs) for (const [k, v] of Object.entries(spec.attrs)) setAttr(svg, k, v);
 
