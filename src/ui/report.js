@@ -196,15 +196,42 @@ function fixPanel(overall, onCopy) {
 
     row.append(el('span', { class: 'fix__rank', text: String(i + 1).padStart(2, '0') }));
 
+    const from = el('span', { class: 'fix__from' }, [
+      el('span', { class: 'fix__tag', text: isBlocker ? 'blocker' : 'polish' }),
+      el('span', { text: fix.moduleTitle }),
+    ]);
+
     const main = el('div', { class: 'fix__main' }, [
       el('p', { class: 'fix__label', text: fix.label }),
-      el('span', { class: 'fix__from' }, [
-        el('span', { class: 'fix__tag', text: isBlocker ? 'blocker' : 'polish' }),
-        el('span', { text: fix.moduleTitle }),
-      ]),
+      from,
     ]);
+
+    // The snippet is collapsed by default. A to-do list you have to scroll
+    // through is not a to-do list, and most people hit Copy without reading —
+    // but the ones who do want to read it should not have to hunt for it.
     if (fix.copyText) {
-      main.append(el('pre', { class: 'fix__code', text: fix.copyText }));
+      const lines = fix.copyText.split('\n').length;
+      const code = el('pre', { class: 'fix__code', text: fix.copyText });
+      code.hidden = true;
+
+      const peek = el(
+        'button',
+        {
+          class: 'fix__peek',
+          attrs: { type: 'button', 'aria-expanded': 'false' },
+        },
+        [I.chevron(), el('span', { text: `Show the text (${lines} line${lines === 1 ? '' : 's'})` })],
+      );
+      peek.addEventListener('click', () => {
+        const open = peek.getAttribute('aria-expanded') === 'true';
+        peek.setAttribute('aria-expanded', open ? 'false' : 'true');
+        code.hidden = open;
+        peek.lastChild.textContent = open
+          ? `Show the text (${lines} line${lines === 1 ? '' : 's'})`
+          : 'Hide the text';
+      });
+      from.append(peek);
+      main.append(code);
     }
     row.append(main);
 
@@ -377,14 +404,13 @@ function gapPanel(entries, bundle, handlers) {
 
     list.append(
       el('div', { class: 'check' }, [
-        el('div', { class: 'check__head', attrs: { 'aria-hidden': 'false' } }, [
+        el('div', { class: 'check__head check__head--static' }, [
           el('span', { class: 'badge' }, [I.statusIcon('incomplete')]),
           el('span', { class: 'check__title' }, [
             el('span', { text: entry.title }),
             el('span', { class: 'check__sub', text: 'Not checked yet' }),
           ]),
           el('span', { class: 'check__score', text: '—' }),
-          el('span'),
         ]),
         box,
       ]),

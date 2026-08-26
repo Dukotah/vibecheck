@@ -545,6 +545,18 @@ html[data-view="report"] .view--report { display: block; animation: rise var(--d
 }
 .fix--blocker .fix__tag { background: var(--fail-soft); border-color: var(--fail-line); color: var(--fail); }
 
+.fix__peek {
+  display: inline-flex; align-items: center; gap: 5px;
+  margin-left: var(--sp-2); padding: 1px 6px 1px 4px;
+  background: none; border: 1px solid var(--line); border-radius: var(--r-sm);
+  color: var(--ink-3); font: inherit; font-size: var(--fs-xs); font-family: var(--mono);
+  cursor: pointer;
+  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.fix__peek:hover { color: var(--ink); border-color: var(--line-3); }
+.fix__peek svg { width: 12px; height: 12px; transition: transform var(--dur) var(--ease); }
+.fix__peek[aria-expanded="true"] svg { transform: rotate(180deg); }
+
 .fix__code {
   margin-top: var(--sp-3); max-height: 260px; overflow: auto;
   background: var(--bg-2); border: 1px solid var(--line); border-radius: var(--r-md);
@@ -598,6 +610,9 @@ html[data-view="report"] .view--report { display: block; animation: rise var(--d
 .finding--bad  .finding__mark { background: var(--fail); }
 
 /* ── Gaps (checks we could not run yet) ──────────────────────────────────── */
+.check__head--static { grid-template-columns: auto 1fr auto; cursor: default; }
+.check__head--static:hover { background: none; }
+
 .gap { background: var(--surface); padding: var(--sp-5); }
 .gap__title { font-weight: 570; }
 .gap__note { font-size: var(--fs-sm); color: var(--ink-3); margin-top: 4px; }
@@ -706,5 +721,6 @@ body.is-dragging .dropveil { display: grid; }
   body { background: #fff; color: #000; }
   .hero-card, .checks, .fixlist, .fix, .check { box-shadow: none !important; border-color: #ccc !important; background: #fff !important; }
   .check__body { display: block !important; }
-  .fix__code { max-height: none; }
+  .fix__code { max-height: none; display: block !important; }
+  .fix__peek { display: none !important; }
 }
