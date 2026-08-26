@@ -493,22 +493,16 @@ export function renderReport(host, opts = {}) {
 }
 
 /** The read-only banner shown when someone opens a shared score link. */
-export function renderSharedBanner(host, payload, onRunMine) {
+export function renderSharedBanner(host, payload) {
   const when = payload.at ? new Date(payload.at) : null;
   const stamp = when
     ? when.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
     : '';
-  const text = payload.siteUrl
-    ? `Someone ran VibeCheck on ${prettyUrl(payload.siteUrl)}${stamp ? ` on ${stamp}` : ''}.`
-    : `A shared VibeCheck score${stamp ? ` from ${stamp}` : ''}.`;
+  const where = payload.siteUrl ? ` on ${prettyUrl(payload.siteUrl)}` : '';
+  const dated = stamp ? `, ${stamp}` : '';
+  const text =
+    `This is a shared score card${where}${dated}. It carries the score and the per-check ` +
+    'verdicts and nothing else — no findings, no code, not even the names of what is broken.';
 
-  const bar = el('div', { class: 'sharedbar' }, [
-    el('p', { text: `${text} This is the score card only — the details stay with whoever ran it.` }),
-    el(
-      'button',
-      { class: 'btn btn--primary btn--sm', attrs: { type: 'button' }, on: { click: onRunMine } },
-      [el('span', { text: 'Check my own' })],
-    ),
-  ]);
-  host.append(bar);
+  host.append(el('div', { class: 'sharedbar' }, [el('p', { text })]));
 }

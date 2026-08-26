@@ -195,13 +195,10 @@ function paintReport() {
     },
   });
   setView('report');
-  // Keep the share token in the address bar so a refresh (or a copied browser
-  // URL) still shows the same score card.
-  const token = encodeReport(o, { siteUrl: state.bundle.siteUrl, at: Date.now() });
-  if (token) {
-    const next = `${window.location.pathname}?${SHARE_PARAM}=${token}`;
-    window.history.replaceState({}, '', next);
-  }
+  // Deliberately NOT writing the share token into the address bar. Sharing is
+  // an explicit act — and a ?r= link decodes as the read-only score card, so
+  // auto-writing it meant refreshing your own report silently downgraded it to
+  // a stranger's view of itself, fixes and all gone.
 }
 
 function handleGapSubmit(moduleId, text) {
@@ -471,40 +468,46 @@ function showShared(payload) {
   renderScoreHero($.scoreHero, {
     overall: o,
     siteUrl: payload.siteUrl,
-    actions: [{ label: 'Check my own', icon: I.again, primary: true, onClick: startOver }],
+    actions: [{ label: 'Check something of mine', icon: I.again, primary: true, onClick: startOver }],
   });
 
   clear($.reportBody);
-  renderSharedBanner($.reportBody, payload, startOver);
+  renderSharedBanner($.reportBody, payload);
+  renderSharedBreakdown($.reportBody, o.breakdown);
+  setView('report');
+}
 
-  const list = el('div', { class: 'fixlist' });
-  o.breakdown.forEach((b) => {
+const SHARED_WORD = { pass: 'good', warn: 'needs a look', fail: 'blocker', incomplete: 'not checked' };
+
+/** The per-check verdicts, styled like the real report's check rows. */
+function renderSharedBreakdown(host, breakdown) {
+  const list = el('div', { class: 'checks' });
+  for (const b of breakdown) {
     list.append(
-      el('div', { class: `fix${b.status === 'fail' ? ' fix--blocker' : ''}` }, [
-        el('span', { class: 'fix__rank' }),
-        el('div', { class: 'fix__main' }, [
-          el('p', { class: 'fix__label', text: b.title }),
-          el('span', { class: 'fix__from' }, [
-            el('span', {
-              class: 'fix__tag',
-              text: b.status === 'fail' ? 'blocker' : b.status === 'warn' ? 'polish' : b.status === 'pass' ? 'good' : 'not run',
-            }),
-            el('span', { text: b.status === 'incomplete' ? 'not checked' : `${b.score}/100` }),
+      el('div', { class: 'check' }, [
+        el('div', { class: 'check__head check__head--static' }, [
+          el('span', { class: `badge badge--${b.status}` }, [I.statusIcon(b.status)]),
+          el('span', { class: 'check__title' }, [
+            el('span', { text: b.title }),
+            el('span', { class: 'check__sub', text: SHARED_WORD[b.status] || b.status }),
           ]),
+          el('span', {
+            class: 'check__score',
+            text: b.status === 'incomplete' ? '—' : String(b.score),
+          }),
         ]),
       ]),
     );
-  });
-  $.reportBody.append(
+  }
+  host.append(
     el('section', { class: 'panel' }, [
       el('div', { class: 'panel__head' }, [
         el('h2', { class: 'panel__title', text: 'How it scored' }),
+        el('p', { class: 'panel__note', text: 'Verdicts only — the details stayed with whoever ran it.' }),
       ]),
       list,
     ]),
   );
-
-  setView('report');
 }
 
 // ── Boot ────────────────────────────────────────────────────────────────────
