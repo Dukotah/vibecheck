@@ -18,6 +18,47 @@ import { normalizeResult } from './contract.js';
 /** Ranking used to order fixes: fails first, then warns. */
 const STATUS_PRIORITY = { fail: 0, warn: 1, incomplete: 2, pass: 3 };
 
+/**
+ * Order the to-do list so the top of it is worth reading.
+ *
+ * Blockers still come before polish. But within a tier we deal one fix from
+ * each check in turn, rather than emptying one check before starting the next.
+ * Without this, a page missing its social tags produces six near-identical
+ * "Fix og:whatever" rows at the top and buries the license blocker underneath —
+ * technically correctly ordered, useless to look at.
+ *
+ * @param {Array<{id:string,status:string}>} fixes
+ * @returns {Array<object>} the same fixes, reordered
+ */
+export function interleaveFixes(fixes) {
+  const list = Array.isArray(fixes) ? fixes : [];
+  const tiers = new Map();
+
+  for (const fix of list) {
+    const tier = STATUS_PRIORITY[fix.status] ?? 9;
+    if (!tiers.has(tier)) tiers.set(tier, new Map());
+    const byCheck = tiers.get(tier);
+    if (!byCheck.has(fix.id)) byCheck.set(fix.id, []);
+    byCheck.get(fix.id).push(fix);
+  }
+
+  const out = [];
+  for (const tier of [...tiers.keys()].sort((a, b) => a - b)) {
+    const queues = [...tiers.get(tier).values()];
+    let dealt = true;
+    for (let round = 0; dealt; round += 1) {
+      dealt = false;
+      for (const queue of queues) {
+        if (round < queue.length) {
+          out.push(queue[round]);
+          dealt = true;
+        }
+      }
+    }
+  }
+  return out;
+}
+
 /** A check that flagged a blocker cannot contribute more than this. */
 export const BLOCKER_CAP = 50;
 
@@ -103,7 +144,7 @@ export function aggregate(entries) {
     }
   }
 
-  fixes.sort((a, b) => (STATUS_PRIORITY[a.status] ?? 9) - (STATUS_PRIORITY[b.status] ?? 9));
+  const ordered = interleaveFixes(fixes);
 
   const checksTotal = list.length;
   if (counted === 0) {
@@ -115,7 +156,7 @@ export function aggregate(entries) {
       checksTotal,
       blockers: 0,
       breakdown,
-      fixes,
+      fixes: ordered,
     };
   }
 
@@ -129,6 +170,6 @@ export function aggregate(entries) {
     checksTotal,
     blockers,
     breakdown,
-    fixes,
+    fixes: ordered,
   };
 }

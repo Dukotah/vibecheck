@@ -101,10 +101,14 @@ export function checkSharePreview(headHtml, pageUrl) {
     });
   }
 
-  // Fixes: one-click corrected tags per fixable problem, plus a full block.
+  // Fixes: the consolidated head block, plus a per-tag snippet for the things
+  // that actually BREAK the card. Warnings are already covered by the block, and
+  // listing each one separately turns "1 problem" into a wall of six near-
+  // identical rows at the top of the user's to-do list.
   const fixes = [];
   const seenFixText = new Set();
   for (const issue of problems(result)) {
+    if (issue.severity !== SEVERITY.ERROR) continue;
     const snippet = metaFixFor(issue, parsed);
     if (snippet && !seenFixText.has(snippet)) {
       seenFixText.add(snippet);

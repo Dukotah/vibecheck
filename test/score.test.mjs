@@ -88,3 +88,43 @@ test('scoreBand thresholds', () => {
   assert.equal(scoreBand(85).status, 'ready');
   assert.equal(scoreBand(60).status, 'almost');
 });
+
+test('the to-do list deals one fix per check before repeating a check', () => {
+  // A page missing all its social tags produces many near-identical fixes.
+  // Without interleaving they bury every other blocker under a wall of
+  // "Fix og:whatever", which is correctly ordered and useless to read.
+  const o = aggregate([
+    entry('share', {
+      status: 'fail', score: 30, summary: '', findings: [],
+      fixes: [
+        { label: 'og:title', copyText: 'a' },
+        { label: 'og:image', copyText: 'b' },
+        { label: 'og:url', copyText: 'c' },
+        { label: 'og:type', copyText: 'd' },
+      ],
+    }),
+    entry('legal', {
+      status: 'fail', score: 10, summary: '', findings: [],
+      fixes: [{ label: 'Add a LICENSE file', copyText: 'e' }],
+    }),
+    entry('docs', {
+      status: 'warn', score: 60, summary: '', findings: [],
+      fixes: [{ label: 'Add install steps', copyText: 'f' }],
+    }),
+  ]);
+
+  const ids = o.fixes.map((f) => f.id);
+  // Both blockers surface before the second social-tag fix.
+  assert.deepEqual(ids.slice(0, 2), ['share', 'legal']);
+  // Blockers still all come before the warn-tier fix.
+  assert.equal(ids[ids.length - 1], 'docs');
+  assert.equal(o.fixes.length, 6);
+});
+
+test('interleaving preserves every fix exactly once', () => {
+  const o = aggregate([
+    entry('a', { status: 'fail', score: 0, summary: '', findings: [], fixes: [{ label: 'a1', copyText: '' }, { label: 'a2', copyText: '' }] }),
+    entry('b', { status: 'warn', score: 50, summary: '', findings: [], fixes: [{ label: 'b1', copyText: '' }] }),
+  ]);
+  assert.deepEqual(o.fixes.map((f) => f.label).sort(), ['a1', 'a2', 'b1']);
+});
