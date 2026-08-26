@@ -694,6 +694,9 @@ body.is-dragging .dropveil { display: grid; }
 
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 @media (max-width: 720px) {
+  /* The eyebrow is the widest fixed line on the page; at 390px it runs edge to
+     edge, so it gives up some tracking rather than the page giving up margin. */
+  .hero__eyebrow { letter-spacing: .08em; font-size: .6875rem; }
   .launcher { flex-direction: column; }
   .launcher__field { width: 100%; }
   .btn--primary { width: 100%; }
