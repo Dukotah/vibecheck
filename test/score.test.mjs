@@ -28,9 +28,9 @@ test('all-incomplete entries stay incomplete but count total', () => {
   assert.equal(o.checksTotal, 2);
 });
 
-test('a single pass yields 100 and ready', () => {
+test('a single pass reports its own score, not a rounded bucket', () => {
   const o = aggregate([entry('a', { status: 'pass', score: 90, summary: '', findings: [], fixes: [] })]);
-  assert.equal(o.score, 100);
+  assert.equal(o.score, 90);
   assert.equal(o.status, 'ready');
   assert.equal(o.checksRun, 1);
 });
@@ -40,12 +40,12 @@ test('incomplete checks do not drag down the average', () => {
     entry('a', { status: 'pass', score: 90, summary: '', findings: [], fixes: [] }),
     entry('b', { status: 'incomplete', score: 0, summary: '', findings: [], fixes: [] }),
   ]);
-  assert.equal(o.score, 100);
+  assert.equal(o.score, 90);
   assert.equal(o.checksRun, 1);
   assert.equal(o.checksTotal, 2);
 });
 
-test('pass+warn+fail averages weights (1 + .5 + 0)/3', () => {
+test('pass+warn+fail averages the real scores', () => {
   const o = aggregate([
     entry('a', { status: 'pass', score: 100, summary: '', findings: [], fixes: [] }),
     entry('b', { status: 'warn', score: 50, summary: '', findings: [], fixes: [] }),

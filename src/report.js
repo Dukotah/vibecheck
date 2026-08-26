@@ -28,7 +28,7 @@ const STATUS_WORD = {
 /**
  * Build the structured report card object from scored entries.
  * @param {import('./score.js').ScoredEntry[]} [entries]
- * @param {{ now?: Date }} [opts]
+ * @param {{ now?: Date, siteUrl?: string }} [opts]
  * @returns {ReportCard}
  */
 export function buildReport(entries, opts = {}) {
@@ -55,6 +55,7 @@ export function buildReport(entries, opts = {}) {
   return {
     title: 'VibeCheck — Launch Readiness Report',
     generatedAt: now.toISOString(),
+    siteUrl: typeof opts.siteUrl === 'string' ? opts.siteUrl : '',
     overall,
     sections,
   };
@@ -73,6 +74,10 @@ export function toMarkdown(report) {
   lines.push(`# ${report.title}`);
   lines.push('');
   lines.push(`**Launch Readiness: ${o.score}/100 — ${o.label}**`);
+  if (report.siteUrl) {
+    lines.push('');
+    lines.push(`Checked: ${report.siteUrl}`);
+  }
   lines.push('');
   lines.push(`_${o.checksRun} of ${o.checksTotal} checks run. Generated ${report.generatedAt}._`);
   lines.push('');

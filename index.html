@@ -1,173 +1,158 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-view="home">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>VibeCheck — Launch Readiness for apps built with AI</title>
-  <meta name="description" content="Built an app with AI? Run a vibe check before you ship. Free, no signup, runs in your browser. One plain-English readiness score and a prioritized fix list.">
-  <meta name="color-scheme" content="light">
+  <title>VibeCheck — is what you built ready to ship?</title>
+  <meta name="description" content="Paste the link to the app you built with AI. Ten seconds later you get a Launch Readiness score, in plain English, with copy-paste fixes. Free, no signup.">
+  <meta name="color-scheme" content="dark light">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles/main.css">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="VibeCheck">
+  <meta property="og:title" content="VibeCheck — is what you built ready to ship?">
+  <meta property="og:description" content="Paste your link. Get a Launch Readiness score in plain English, with the fixes. Free, no signup.">
+  <meta property="og:image" content="https://vibecheck.copperbaytech.com/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="VibeCheck — a Launch Readiness score card showing 87 out of 100.">
+  <meta property="og:url" content="https://vibecheck.copperbaytech.com/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://vibecheck.copperbaytech.com/og.png">
+
+  <!-- Applies the saved theme before first paint. Kept in its own file so the
+       Content-Security-Policy can forbid inline script outright. -->
+  <script src="theme-boot.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="site-header">
-    <div class="wrap site-header__inner">
-      <a class="brand" href="./">
-        <span class="brand__mark" aria-hidden="true">
-          <svg viewBox="0 0 28 28" fill="none" focusable="false">
-            <path d="M8 14.5l4 4 8-9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </span>
-        <span class="brand__name">VibeCheck</span>
-      </a>
-      <p class="brand__note">
-        <span class="brand__note-item">Free</span>
-        <span class="brand__note-item">No signup</span>
-        <span class="brand__note-item">Runs in your browser</span>
-      </p>
+  <header class="chrome">
+    <a class="brand" href="./" aria-label="VibeCheck home">
+      <span class="brand__mark" aria-hidden="true"></span>
+      <span class="brand__name">VibeCheck</span>
+    </a>
+    <div class="chrome__right">
+      <button class="iconbtn" id="theme-toggle" type="button" aria-label="Switch between dark and light"></button>
+      <a class="chrome__link" href="https://github.com/Dukotah/vibecheck" rel="noopener">Source</a>
     </div>
   </header>
 
   <main id="main">
-    <!-- Hero -->
-    <section class="hero">
-      <div class="wrap">
-        <p class="hero__eyebrow">Launch readiness for vibecoded apps</p>
-        <h1 class="hero__title">Built an app with AI? Run a vibe check before you ship.</h1>
+
+    <!-- ══ HOME ══════════════════════════════════════════════════════════ -->
+    <section class="view view--home" data-view-name="home">
+      <div class="hero">
+        <p class="hero__eyebrow">Launch readiness for things built with AI</p>
+        <h1 class="hero__title">You built it in a weekend.<br>Is it safe to ship on Monday?</h1>
         <p class="hero__sub">
-          You used Cursor, Bolt, Lovable, Replit, v0, or Claude to build something real.
-          Before you put it in front of the world, get a plain-English
-          <strong>Launch Readiness</strong> score — no accounts, no tech jargon, and
-          nothing you paste ever leaves your browser.
+          Paste the link to what you made with Cursor, Lovable, Bolt, Replit, v0 or Claude.
+          Ten seconds later you get a straight answer, in normal words, with the fixes
+          already written out for you.
         </p>
-        <div class="hero__cta">
-          <a class="btn btn--primary btn--lg" href="#dashboard-section">Start my vibe check</a>
-          <a class="btn btn--ghost btn--lg" href="#how">How it works</a>
-        </div>
-        <ul class="hero__trust" role="list">
-          <li class="trust-pill">
-            <svg class="trust-pill__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
-              <rect x="4.5" y="9" width="11" height="7.5" rx="1.6" stroke="currentColor" stroke-width="1.5"/>
-              <path d="M7 9V6.75a3 3 0 0 1 6 0V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-            100% in your browser
-          </li>
-          <li class="trust-pill">
-            <svg class="trust-pill__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
-              <path d="M10 2.5 4 5v4.2c0 3.6 2.5 6.3 6 8.3 3.5-2 6-4.7 6-8.3V5l-6-2.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-              <path d="m7.6 10 1.7 1.7L13 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            Open source (MIT)
-          </li>
-          <li class="trust-pill">
-            <svg class="trust-pill__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
-              <path d="M3.5 12.5A6.5 6.5 0 0 1 15 8.4M16.5 7.5V4M16.5 7.5H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M16.5 7.5A6.5 6.5 0 0 1 5 11.6M3.5 12.5V16M3.5 12.5H7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            Works offline
-          </li>
-        </ul>
-      </div>
-    </section>
 
-    <!-- How it works -->
-    <section id="how" class="how-section" aria-labelledby="how-heading">
-      <div class="wrap">
-        <h2 id="how-heading" class="section-title">How it works</h2>
-        <ol class="steps" role="list">
-          <li class="step">
-            <span class="step__num" aria-hidden="true">1</span>
-            <h3 class="step__title">Pick a check</h3>
-            <p class="step__text">Five quick checks, run in any order. Not sure? Start at the top.</p>
-          </li>
-          <li class="step">
-            <span class="step__num" aria-hidden="true">2</span>
-            <h3 class="step__title">Paste something simple</h3>
-            <p class="step__text">Your page HTML, your README, your robots.txt — or click a built-in example to see it work.</p>
-          </li>
-          <li class="step">
-            <span class="step__num" aria-hidden="true">3</span>
-            <h3 class="step__title">Get plain-English results</h3>
-            <p class="step__text">A clear score, what is wrong, and copy-paste fixes. Your readiness score updates live.</p>
-          </li>
-        </ol>
-      </div>
-    </section>
-
-    <!-- Overall score -->
-    <section class="score-section" aria-labelledby="score-heading">
-      <div class="wrap">
-        <h2 id="score-heading" class="section-title">Your Launch Readiness</h2>
-        <div class="score-card">
-          <div id="score-panel" class="score" aria-live="polite">
-            <!-- score gauge injected by src/ui/results.js -->
+        <form class="launcher" id="url-form" novalidate>
+          <div class="launcher__field">
+            <span class="launcher__scheme" aria-hidden="true">https://</span>
+            <input
+              class="launcher__input"
+              id="url-input"
+              type="text"
+              inputmode="url"
+              autocomplete="url"
+              spellcheck="false"
+              placeholder="my-app.vercel.app"
+              aria-label="The address of the site you want to check">
           </div>
-          <p id="run-progress" class="score-card__progress">
-            Nothing checked yet — pick a check below to begin. Your score updates as you go.
-          </p>
-          <div class="score-card__actions">
-            <button class="btn btn--ghost btn--sm" id="export-md" type="button" disabled>Copy report (Markdown)</button>
-            <button class="btn btn--ghost btn--sm" id="download-md" type="button" disabled>Download report</button>
-            <button class="btn btn--ghost btn--sm" id="print-report" type="button" disabled>Print / save as PDF</button>
-          </div>
-        </div>
-      </div>
-    </section>
+          <button class="btn btn--primary" type="submit" id="url-submit">
+            <span>Check it</span>
+            <kbd class="btn__kbd" aria-hidden="true">↵</kbd>
+          </button>
+        </form>
+        <p class="launcher__error" id="url-error" role="alert" hidden></p>
 
-    <!-- The 5 checks -->
-    <section id="dashboard-section" class="dashboard-section" aria-labelledby="dash-heading">
-      <div class="wrap">
-        <h2 id="dash-heading" class="section-title">The 5 checks</h2>
-        <p class="section-lead">
-          Run them in any order. Each one asks for something simple you can paste in
-          (your HTML, your README, your robots.txt) and gives you a clear result.
+        <p class="launcher__alt">
+          Nothing live yet?
+          <button class="linkish" id="pick-files" type="button">Drop your project files</button>
+          — those are read in your browser and never uploaded.
+          <input class="visually-hidden" id="file-input" type="file" multiple>
         </p>
-        <div id="dashboard" class="dashboard">
-          <!-- check cards injected by src/ui/cards.js -->
-          <p class="empty-state">Loading your checks…</p>
-        </div>
+      </div>
+
+      <ul class="promise" role="list">
+        <li class="promise__item" data-check="legal">
+          <span class="promise__icon" aria-hidden="true"></span>
+          <span class="promise__title">Can you legally ship it?</span>
+          <span class="promise__note">Your license, and every library you pulled in.</span>
+        </li>
+        <li class="promise__item" data-check="accessibility">
+          <span class="promise__icon" aria-hidden="true"></span>
+          <span class="promise__title">Can everyone use it?</span>
+          <span class="promise__note">The accessibility basics that get sites sued.</span>
+        </li>
+        <li class="promise__item" data-check="crawlers">
+          <span class="promise__icon" aria-hidden="true"></span>
+          <span class="promise__title">Who gets to train on it?</span>
+          <span class="promise__note">Which AI crawlers your site currently lets in.</span>
+        </li>
+        <li class="promise__item" data-check="sharepreview">
+          <span class="promise__icon" aria-hidden="true"></span>
+          <span class="promise__title">Does the link look good?</span>
+          <span class="promise__note">What people see when they post you in Slack.</span>
+        </li>
+        <li class="promise__item" data-check="docs">
+          <span class="promise__icon" aria-hidden="true"></span>
+          <span class="promise__title">Can a stranger run it?</span>
+          <span class="promise__note">Whether your README actually explains anything.</span>
+        </li>
+      </ul>
+
+      <p class="fineprint">
+        Free. No signup. No account. Open source.
+        The only thing that ever leaves your browser is an address you type here,
+        and it goes to our own fetcher — never a third party, never stored.
+      </p>
+    </section>
+
+    <!-- ══ SCANNING ══════════════════════════════════════════════════════ -->
+    <section class="view view--scan" data-view-name="scan" aria-live="polite">
+      <div class="scan">
+        <p class="scan__label">Checking</p>
+        <p class="scan__target" id="scan-target"></p>
+        <ol class="scan__steps" id="scan-steps" role="list"></ol>
+        <button class="btn btn--quiet btn--sm" id="scan-cancel" type="button">Cancel</button>
       </div>
     </section>
 
-    <!-- Work panel: a single check's form -->
-    <section class="wrap">
-      <div id="work-panel" class="work-panel" hidden aria-live="polite">
-        <!-- a module's form injected by src/ui/form.js -->
-      </div>
+    <!-- ══ REPORT ════════════════════════════════════════════════════════ -->
+    <section class="view view--report" data-view-name="report">
+      <div id="score-hero" class="hero-card"></div>
+      <div id="report-body" class="report-body"></div>
     </section>
 
-    <!-- Results + prioritized fixes -->
-    <section class="report-section" aria-labelledby="report-heading">
-      <div class="wrap report-grid">
-        <div class="report-grid__main">
-          <h2 id="report-heading" class="section-title">Latest result</h2>
-          <div id="results" class="results" aria-live="polite">
-            <p class="empty-state">Run a check above and your result shows up here.</p>
-          </div>
-        </div>
-        <aside class="report-grid__side" aria-labelledby="fixlist-heading">
-          <h2 id="fixlist-heading" class="section-title">To-do before launch</h2>
-          <div id="fix-list" class="fixlist-wrap">
-            <!-- prioritized fixes injected by src/ui/results.js -->
-          </div>
-        </aside>
-      </div>
-    </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="wrap">
-      <p>
-        VibeCheck is free and open source (<a href="https://github.com/Dukotah/vibecheck">MIT</a>).
-        It runs entirely in your browser — your code and text never leave this page.
-      </p>
-      <p class="site-footer__fine">
-        Not legal or compliance advice. VibeCheck catches the common, high-impact
-        misses; a clean score is a great start, not a guarantee.
-      </p>
-    </div>
+  <footer class="footer">
+    <p>
+      <strong>VibeCheck</strong> is free and open source under
+      <a href="https://github.com/Dukotah/vibecheck" rel="noopener">MIT</a>.
+      Built by <a href="https://copperbaytech.com" rel="noopener">Copper Bay Tech</a>.
+    </p>
+    <p class="footer__fine">
+      Not legal or compliance advice. VibeCheck catches the common, high-impact misses.
+      A clean score is a great start, not a guarantee.
+    </p>
   </footer>
+
+  <div class="dropveil" id="dropveil" aria-hidden="true">
+    <div class="dropveil__inner">
+      <p class="dropveil__title">Drop them anywhere</p>
+      <p class="dropveil__note">README, package.json, LICENSE, robots.txt, your HTML — we sort out which is which.</p>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script type="module" src="src/shell.js"></script>
 </body>

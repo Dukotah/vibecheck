@@ -1,27 +1,31 @@
 {
   "name": "vibecheck",
-  "version": "1.0.0",
-  "description": "VibeCheck — a free, no-signup, browser-only Launch Readiness report card for apps built with AI coding tools. Runs 5 pre-launch checks (legal, accessibility, AI crawlers, social share preview, docs) client-side and gives one plain-English readiness score plus a prioritized fix list.",
+  "version": "2.0.0",
+  "description": "VibeCheck — paste the link to the app you built with AI and get a plain-English Launch Readiness score out of 100, with copy-paste fixes. Five pre-launch checks (legal, accessibility, AI crawlers, social share preview, docs). Free, no signup.",
   "type": "module",
   "license": "MIT",
   "author": "Dukotah",
-  "homepage": "https://dukotah.github.io/vibecheck/",
+  "homepage": "https://vibecheck.copperbaytech.com",
   "repository": {
     "type": "git",
     "url": "https://github.com/Dukotah/vibecheck.git"
   },
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "dev": "python3 -m http.server 8000",
+    "og": "python tools/make-og.py"
   },
   "keywords": [
     "launch-readiness",
     "vibecoding",
     "ai-coding",
     "accessibility",
+    "wcag",
     "robots-txt",
     "open-graph",
     "license-checker",
-    "static-site",
-    "no-signup"
+    "pre-launch",
+    "no-signup",
+    "static-site"
   ]
 }

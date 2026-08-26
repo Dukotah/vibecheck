@@ -1,0 +1,11 @@
+# VibeCheck — https://vibecheck.copperbaytech.com
+# We check other people's robots.txt, so ours had better be deliberate.
+
+# Search engines: yes please.
+User-agent: *
+Allow: /
+
+# The scan endpoint is a tool, not content. No value in crawling it.
+Disallow: /api/
+
+Sitemap: https://vibecheck.copperbaytech.com/sitemap.xml
