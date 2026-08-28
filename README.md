@@ -55,6 +55,13 @@ license situation and your docs.
 You can mix them. Run the URL, then paste your README into the report to fill
 the gap, and the score updates in place.
 
+**If your app renders entirely in the browser** — the usual output of Lovable,
+Bolt, v0 and Replit — the HTML we can fetch is an empty shell, and grading
+accessibility on it would produce a good score for a page with nothing in it.
+VibeCheck detects that, refuses to score it, and tells you how to paste the
+rendered HTML instead. The share preview still runs, because those `<meta>` tags
+are really in the shell.
+
 ## Where your code goes
 
 Nowhere.
@@ -73,7 +80,11 @@ Nowhere.
 The fetcher is written defensively: http/https only, no credentials in the URL,
 every redirect hop re-validated, DNS resolved and refused if it lands on a
 private, loopback, link-local or CGNAT address, plus a hard timeout, a byte cap,
-and a redirect limit.
+and a redirect limit. It is also throttled — 12 scans a minute and 120 an hour
+per client — because an open URL fetcher on a public deployment is otherwise a
+free proxy. That limiter lives in one serverless instance's memory, so it stops
+one client looping rather than a distributed flood; it is not pretending to be
+more than that.
 
 ## Share your score
 
@@ -123,8 +134,10 @@ src/
   modules/<id>.js   one adapter per check
   modules/<id>/*.js the pure logic for that check
   ui/               the only files allowed to touch the DOM
+  ingest/rendered.js  is this real HTML, or an unrendered app shell?
 api/
   scan.js           fetch a public page + its robots.txt (SSRF-hardened)
+  _ratelimit.js     per-client throttle (underscore = not routed)
   badge.js          the README badge, as SVG
 tools/make-og.py    renders og.png, the social card
 ```
@@ -166,6 +179,18 @@ Put the real logic in pure files under `src/modules/<id>/`, register it in
 scan, the scorer, the report and the share link all pick it up automatically.
 
 ## Changelog
+
+### 2.0.1
+
+- Refuse to score accessibility on a client-rendered app shell. A page that
+  builds itself with JavaScript was scoring 75/100 on an empty body — confident
+  and meaningless, for exactly the tools this is aimed at.
+- The AI-crawler blocking choice can be changed after the check has run. It was
+  previously a dead end: a site that deliberately welcomes AI crawlers was told
+  it had a blocker with nowhere to say otherwise.
+- Throttle `/api/scan` (12/min, 120/hour per client).
+- Label our own file input. VibeCheck failed its own accessibility check, which
+  is either embarrassing or the best possible endorsement.
 
 ### 2.0.0
 
