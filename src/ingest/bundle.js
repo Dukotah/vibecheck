@@ -10,6 +10,7 @@
 // Pure: no DOM, no network, never throws.
 
 import { detect, KIND_LABEL } from './detect.js';
+import { detectShell, SHELL_NOTE } from './rendered.js';
 
 /** Which check each kind of file feeds. Used for the receipt copy. */
 export const KIND_FEEDS = {
@@ -34,6 +35,7 @@ export function emptyBundle() {
     },
     intent: { blockTraining: true, blockAssistants: false, blockSearchAi: false },
     notes: [],
+    shellOnly: false,
   };
 }
 
@@ -53,6 +55,7 @@ function cloneBundle(b) {
     },
     intent: { ...base.intent, ...(b.intent || {}) },
     notes: Array.isArray(b.notes) ? b.notes.slice() : [],
+    shellOnly: !!b.shellOnly,
   };
 }
 
@@ -167,6 +170,17 @@ export function addUrlScan(bundle, scan) {
     next = addBlob(next, { text: s.html, name: 'index.html', origin: 'url' });
     // The page URL lets the share-preview check resolve relative image paths.
     next.inputs.sharepreview = { ...next.inputs.sharepreview, pageUrl: next.siteUrl };
+
+    // If all we got was an unrendered app shell, refuse to grade accessibility
+    // on it. There is nothing in the page yet, so every check would pass by
+    // default and we would hand back a confident, meaningless score.
+    // Share preview is unaffected: its <meta> tags are static in the shell.
+    const { shell } = detectShell(s.html);
+    if (shell) {
+      next.inputs.accessibility = {};
+      next.shellOnly = true;
+      next.notes.push(SHELL_NOTE);
+    }
   }
 
   if (s.robotsFound && typeof s.robotsTxt === 'string' && s.robotsTxt.trim()) {

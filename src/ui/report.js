@@ -9,6 +9,7 @@
 
 import { el, clear } from './dom.js';
 import * as I from './icons.js';
+import { SHELL_NOTE } from '../ingest/rendered.js';
 
 // Browser affordances that a non-browser test DOM does not have. Guarding here
 // keeps the render layer testable without a headless browser.
@@ -260,7 +261,7 @@ function fixPanel(overall, onCopy) {
 }
 
 /** One expandable row per check that actually ran. */
-function checkPanel(entries, onCopy) {
+function checkPanel(entries, onCopy, bundle, handlers) {
   const ran = entries.filter((e) => e.result.status !== 'incomplete');
   if (!ran.length) return null;
 
@@ -283,6 +284,22 @@ function checkPanel(entries, onCopy) {
         );
       }
       body.append(ul);
+    }
+
+    // The crawlers check runs against an ASSUMPTION about what you want blocked.
+    // Without this, a site that deliberately welcomes AI crawlers is told it has
+    // a blocker forever, with nowhere to say otherwise.
+    if (id === 'crawlers' && handlers && handlers.onIntent) {
+      body.append(
+        el('div', { class: 'gap' }, [
+          el('p', { class: 'gap__title', text: 'Which AI bots do you actually want to keep out?' }),
+          el('p', {
+            class: 'gap__note',
+            text: 'This result is scored against your answer here. Change it and the score updates.',
+          }),
+          intentToggles(bundle, handlers.onIntent),
+        ]),
+      );
     }
 
     for (const fix of result.fixes) {
@@ -368,11 +385,21 @@ function gapPanel(entries, bundle, handlers) {
   const list = el('div', { class: 'checks' });
 
   for (const entry of missing) {
-    const copy = GAP_COPY[entry.id] || {
+    let copy = GAP_COPY[entry.id] || {
       ask: `Add input for ${entry.title}`,
       why: '',
       placeholder: 'Paste it here.',
     };
+    // A page that builds itself with JavaScript needs a different explanation
+    // and a different instruction than "we could not read the live page".
+    if (entry.id === 'accessibility' && bundle && bundle.shellOnly) {
+      copy = {
+        ask: 'Paste the rendered HTML of your page',
+        why: SHELL_NOTE,
+        placeholder:
+          'Right-click your page → Inspect → right-click the <html> tag → Copy → Copy outerHTML, then paste it here.',
+      };
+    }
     const box = el('div', { class: 'gap' }, [
       el('p', { class: 'gap__title', text: copy.ask }),
       copy.why ? el('p', { class: 'gap__note', text: copy.why }) : null,
@@ -485,7 +512,7 @@ export function renderReport(host, opts = {}) {
   const parts = [
     fixPanel(overall, onCopy),
     gapPanel(entries, bundle, handlers),
-    checkPanel(entries, onCopy),
+    checkPanel(entries, onCopy, bundle, handlers),
     receiptPanel(bundle),
   ].filter(Boolean);
 
