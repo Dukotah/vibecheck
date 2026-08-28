@@ -130,11 +130,11 @@ src/
   ingest/
     detect.js       "what is this blob of text?" — the one-input promise
     bundle.js       collect sources → per-check inputs, with a receipt
+    rendered.js     real HTML, or an unrendered single-page-app shell?
   share/codec.js    report ⇄ share link, hostile-input-proof
   modules/<id>.js   one adapter per check
   modules/<id>/*.js the pure logic for that check
   ui/               the only files allowed to touch the DOM
-  ingest/rendered.js  is this real HTML, or an unrendered app shell?
 api/
   scan.js           fetch a public page + its robots.txt (SSRF-hardened)
   _ratelimit.js     per-client throttle (underscore = not routed)
