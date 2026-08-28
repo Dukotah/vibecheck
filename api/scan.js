@@ -15,6 +15,8 @@
 import dns from 'node:dns/promises';
 import net from 'node:net';
 
+import { checkLimits } from './_ratelimit.js';
+
 const MAX_BYTES = 1_500_000; // ~1.5MB of HTML is far more than any real page
 const MAX_ROBOTS_BYTES = 100_000;
 const TIMEOUT_MS = 10_000;
@@ -194,6 +196,16 @@ export default async function handler(req, res) {
   if (req.method !== 'GET' && req.method !== 'POST') {
     return send(res, 405, { error: 'Use GET.' });
   }
+
+  // Throttle before doing any work, so a flood costs us a header read.
+  const limit = checkLimits(req);
+  if (!limit.allowed) {
+    res.setHeader('retry-after', String(limit.retryAfterSec));
+    return send(res, 429, {
+      error: `That is a lot of checks at once. Give it ${limit.retryAfterSec} seconds and try again.`,
+    });
+  }
+
   const raw =
     (req.query && req.query.url) ||
     (req.body && typeof req.body === 'object' && req.body.url) ||
